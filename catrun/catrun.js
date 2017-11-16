@@ -27,23 +27,28 @@ function drawbg() {
 	ctx.fillRect(10,10,canvas.width,canvas.height);
 }
 
+//점프 실행 함수
+function jump() {
+	
+	dy = -7;
+}
 
-//뛰는 고양이 그리기
+//고양이 그리기
 var count = 0;
 var idx = 0;
 var delay = 10;
-
 function drawcat() {
 	ctx.clearRect(0,0,canvas.width,canvas.height);
 	drawbg();
-	
+	catY += dy;
 	catX += dx;
 	dy = dy + g;
-	catY += + dy;
+	
 
 	if (catX >= 500 || catX <= 0) {
 		dx = -dx;
 	}
+	
 	if(catY >= 200) {
 		catY = 200;
 	}
