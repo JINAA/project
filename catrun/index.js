@@ -7,45 +7,66 @@ catImage[0] = new Image();
 catImage[1] = new Image();
 catImage[0].src = "cat1.png";
 catImage[1].src = "cat2.png";
-//배경 부르기
+//배경 그림 부르기
 var bg = new Image();
+var bgLoad = false;
+bg.onload = function() {
+	bgLoad = true;
+}
 bg.src = 'bg.png';
 
+//장애물  그림 부르기
+var objImage = new Image();
+// var objLoad = false;
+// objImage.onload = function() {
+// 	objLoad = true;
+// }
+objImage.src = "obj.png";
 //장애물 변수
-var objW = 50;
-var objH = 50;
+var data = {
+	"sx":35,
+	"sy":460,
+	"w":235,
+	"h":300,
+	"x":400,
+	"y":240,
+	"status":1
+};
+//장애물 그리기
+function drawobj() {
+	ctx.drawImage(objImage,data.sx,data.sy,data.w,data.h
+		,data.x,data.y,data.w / 4,data.h / 3.5 );
+		data.x -= 2;
+}
+//장애물 충돌감지
+function collision() {
+	var distanceX = ((catX-25)+catX/2)-data.x;
+	var distanceY = (catY+catY/2)-data.y;
+	var distance = (distanceX * distanceX) + (distanceY * distanceY);
+
+	if (data.status == 1) {
+		if (distance <= data.w + (catwidth/2) * data.h + (catheight/2)){
+			alert("GAME OVER");
+		}
+	}
+}
 
 //배경 변수
 var sizeX = 550;
 var sizeY = 350;
-var speed = 10;
-var yy = 0;
 var ddx = - 0.75;
-var xx = 0;
+var bgX = 0;
+var i = 0;
 //배경그리기
 function drawbg() {
- 	ctx.clearRect(0,0,canvas.width,canvas.height);
-	
-	ctx.drawImage(bg,xx - canvas.width,yy,canvas.width,canvas.height);
+	i=i+2;
+	ctx.clearRect(0,0,canvas.width,canvas.height);
+	ctx.drawImage(bg,0 - i,0,sizeX, sizeY);
+	ctx.drawImage(bg,0 - i + sizeX,0,sizeX, sizeY);
 
- 		if (xx > sizeX) { xx = sizeX - canvas.width}
- 		if (xx < sizeX + canvas.width) {
- 			ctx.drawImage(bg,xx + canvas.width,yy,canvas.width,canvas.height);
- 		}
-
- 	ctx.drawImage(bg,xx,yy,canvas.width,canvas.height);
-
- 	xx += ddx;
-}
-setInterval(drawbg, speed);
-
-//장애물 그리기
-function drawobj() {
-	ctx.beginPath();
-	ctx.rect(400,265,objW,objH);
-	ctx.fillStyle = "purple";
-	ctx.fill();
-	ctx.closePath();
+	if (i == sizeX ) {
+		i = 0;
+	}
 }
 
 //고양이 사이즈와 초기좌표
@@ -53,32 +74,19 @@ var catwidth = 90;
 var catheight = 90;
 var catX = 100;
 var catY = 220;
-
 //고양이 움직임
 var dx = 0;
 var dy = -7;
-
 //고양이 중력
 var g = 0.2;
-
-//점프 실행 함수
-function jump() {
-	dy = -7;
-}
-
-//뛰는 고양이 그리기
+//고양이 그리기
 var count = 0;
 var idx = 0;
 var delay = 10;
-
 function drawcat() {
-	ctx.clearRect(0,0,canvas.width,canvas.height);
-	drawbg();
-	drawobj();
-
 	catX += dx;
 	dy = dy + g;
-	catY += + dy;
+	catY += dy;
 
 	if (catX >= 500 || catX <= 0) {
 		dx = -dx;
@@ -90,10 +98,10 @@ function drawcat() {
 	count++;
 	if (count >= delay) {
 		idx++;
-		if (idx > 1) {
-			idx = 0;
-		}
-	count = 0;
+	if (idx > 1) {
+		idx = 0;
+	}
+		count = 0;
 	}
 
 	if (catY != 230) {
@@ -101,7 +109,30 @@ function drawcat() {
 	} else {
 		ctx.drawImage(catImage[idx],catX,catY,catwidth,catheight);
 	}
-	requestAnimationFrame(drawcat);
 }
 
-requestAnimationFrame(drawcat);
+//키보드 조작
+document.addEventListener("keypress", jump);
+//점프 실행 함수
+function jump() {
+	if (event.keyCode == 32) {
+		if (catY > canvas.height / 2){
+			dy = -7.5;
+		}
+	}
+}
+
+//그리기
+function drawAll() {
+	ctx.clearRect(0,0,canvas.width,canvas.height);
+
+	drawbg();
+	drawobj();
+	drawcat();
+	collision();
+
+	requestAnimationFrame(drawAll);
+
+}
+
+requestAnimationFrame(drawAll);
