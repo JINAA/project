@@ -7,54 +7,46 @@ catImage[0] = new Image();
 catImage[1] = new Image();
 catImage[0].src = "cat1.png";
 catImage[1].src = "cat2.png";
-//장애물 그림 부르기
-var objImage = new Image();
-var objLoad = false;
-objImage.onload = function() {
-	objLoad = true;
-}
-objImage.src = "obj.png";
-
 //배경 부르기
 var bg = new Image();
 bg.src = 'bg.png';
+
+//장애물 변수
+var objW = 50;
+var objH = 50;
 
 //배경 변수
 var sizeX = 550;
 var sizeY = 350;
 var speed = 10;
-var yy = - 4.5;
-var ddx = 0.75;
+var yy = 0;
+var ddx = - 0.75;
 var xx = 0;
-
 //배경그리기
 function drawbg() {
-	ctx.clearRect(0,0,canvas.width,canvas.height);
+ 	ctx.clearRect(0,0,canvas.width,canvas.height);
+	
+	ctx.drawImage(bg,xx - canvas.width,yy,canvas.width,canvas.height);
 
-	if (canvas.width <= sizeX) {
-		if (xx > sizeX) { xx = sizeX - canvas.width}
-		if (xx < sizeX + canvas.width) {
-
+ 		if (xx > sizeX) { xx = sizeX - canvas.width}
+ 		if (xx < sizeX + canvas.width) {
  			ctx.drawImage(bg,xx + canvas.width,yy,canvas.width,canvas.height);
-		}
-}
-  else {
-		if (xx > sizeX) { xx = sizeX - canvas.width}
-		if (xx < sizeX + canvas.width) {
-			ctx.drawImage(bg,xx + canvas.width,yy,canvas.width,canvas.height);
-		}
- }
-	ctx.drawImage(bg,xx,yy,canvas.width,canvas.height);
+ 		}
 
-	xx -= ddx;
+ 	ctx.drawImage(bg,xx,yy,canvas.width,canvas.height);
+
+ 	xx += ddx;
 }
 setInterval(drawbg, speed);
 
-//장애물 생성
-function obj() {
-	ctx.drawImage(objImage,137,2260,1147,1494,400,350,80,80);
+//장애물 그리기
+function drawobj() {
+	ctx.beginPath();
+	ctx.rect(400,265,objW,objH);
+	ctx.fillStyle = "purple";
+	ctx.fill();
+	ctx.closePath();
 }
-setInterval(obj,100);
 
 //고양이 사이즈와 초기좌표
 var catwidth = 90;
@@ -82,6 +74,7 @@ var delay = 10;
 function drawcat() {
 	ctx.clearRect(0,0,canvas.width,canvas.height);
 	drawbg();
+	drawobj();
 
 	catX += dx;
 	dy = dy + g;
