@@ -28,9 +28,9 @@ var data = {
 	"sy":460,
 	"w":235,
 	"h":300,
-	"x":400,
+	"x":600,
 	"y":240,
-	"status":1
+	//"status":1
 };
 //장애물 그리기
 function drawobj() {
@@ -40,14 +40,11 @@ function drawobj() {
 }
 //장애물 충돌감지
 function collision() {
-	var distanceX = ((catX-25)+catX/2)-data.x;
-	var distanceY = (catY+catY/2)-data.y;
-	var distance = (distanceX * distanceX) + (distanceY * distanceY);
+	if (data.x+10 < catX+catwidth && data.x+data.w+10 > catX &&
+	data.y < catY+catheight-80 && data.y+data.h > catY-80){
+				alert("GAME OVER");
+				document.location.reload();
 
-	if (data.status == 1) {
-		if (distance <= data.w + (catwidth/2) * data.h + (catheight/2)){
-			alert("GAME OVER");
-		}
 	}
 }
 
@@ -117,7 +114,7 @@ document.addEventListener("keypress", jump);
 function jump() {
 	if (event.keyCode == 32) {
 		if (catY > canvas.height / 2){
-			dy = -7.5;
+			dy = -9;
 		}
 	}
 }
