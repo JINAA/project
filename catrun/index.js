@@ -34,20 +34,30 @@ var data = {
 };
 //장애물 그리기
 function drawobj() {
+
 	ctx.drawImage(objImage,data.sx,data.sy,data.w,data.h
 		,data.x,data.y,data.w / 4,data.h / 3.5 );
 		data.x -= 2;
+
+
 }
+
 //장애물 충돌감지
 function collision() {
-	if (data.x+10 < catX+catwidth && data.x+data.w+10 > catX &&
-	data.y < catY+catheight-80 && data.y+data.h > catY-80){
+
+	if (data.x < (catX+catwidth)+10 && data.x+data.w+10 > catX &&
+	data.y < (catY+catheight)-10 && data.y+data.h-10 > catY) {
 				alert("GAME OVER");
 				document.location.reload();
-
 	}
 }
-
+var score = 0;
+function checkScore() {
+	score++;
+	ctx.font = "16px Arial";
+	ctx.fillStyle = "#0095DD";
+	ctx.fillText("Score: "+score, 8, 20);
+}
 //배경 변수
 var sizeX = 550;
 var sizeY = 350;
@@ -125,8 +135,10 @@ function drawAll() {
 
 	drawbg();
 	drawobj();
-	drawcat();
 	collision();
+	drawcat();
+	checkScore();
+
 
 	requestAnimationFrame(drawAll);
 
