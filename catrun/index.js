@@ -17,47 +17,65 @@ bg.src = 'bg.png';
 
 //장애물  그림 부르기
 var objImage = new Image();
-// var objLoad = false;
-// objImage.onload = function() {
-// 	objLoad = true;
-// }
 objImage.src = "obj.png";
 //장애물 변수
-var data = {
+var crab = {
 	"sx":35,
 	"sy":460,
-	"w":235,
+	"w":225,
 	"h":300,
 	"x":600,
-	"y":240,
-	//"status":1
+	"y":250,
+	"width":70,
+	"height":70
 };
+// function crab(x,width,height) {
+// 	this.sx = 35;
+// 	this.sy = 460;
+// 	this.w = 225;
+// 	this.h = 300;
+// 	this.x = 600;
+// 	this.y = 250;
+// 	this.width = 70;
+// 	this.height = 70;
+// }
+// crab.prototype.drawobj = function() {
+// 	ctx.drawImage(objImage,this.sx,this.sy,this.w,this.h
+// 		,this.x,this.y,this.width,this.height);
+// 		this.x -= 3;
+// }
+// function newobj(n) {
+// 	var width = random(30) + 20;
+// 	var x = new crab(650,60,60)
+// }
 //장애물 그리기
 function drawobj() {
-
-	ctx.drawImage(objImage,data.sx,data.sy,data.w,data.h
-		,data.x,data.y,data.w / 4,data.h / 3.5 );
-		data.x -= 2;
-
-
+	ctx.drawImage(objImage,crab.sx,crab.sy,crab.w,crab.h
+		,crab.x,crab.y,crab.width,crab.height);
+		crab.x -= 3;
 }
 
 //장애물 충돌감지
 function collision() {
 
-	if (data.x < (catX+catwidth)+10 && data.x+data.w+10 > catX &&
-	data.y < (catY+catheight)-10 && data.y+data.h-10 > catY) {
-				alert("GAME OVER");
+	if (crab.x > catX-15 && crab.x < catX+catwidth-15
+	&& crab.y > catY-15 && crab.y < catY+catheight-15) {
+				debugger;
+				// alert("GAME OVER");
 				document.location.reload();
 	}
 }
+//점수 계산
 var score = 0;
 function checkScore() {
 	score++;
 	ctx.font = "16px Arial";
 	ctx.fillStyle = "#0095DD";
-	ctx.fillText("Score: "+score, 8, 20);
+	ctx.font = "20px Verdana";
+	ctx.fillText("Score: " + score, 15, 30);
+
 }
+
 //배경 변수
 var sizeX = 550;
 var sizeY = 350;
@@ -124,13 +142,15 @@ document.addEventListener("keypress", jump);
 function jump() {
 	if (event.keyCode == 32) {
 		if (catY > canvas.height / 2){
-			dy = -9;
+			dy = -8;
 		}
 	}
 }
 
 //그리기
+
 function drawAll() {
+
 	ctx.clearRect(0,0,canvas.width,canvas.height);
 
 	drawbg();
@@ -139,9 +159,6 @@ function drawAll() {
 	drawcat();
 	checkScore();
 
-
 	requestAnimationFrame(drawAll);
-
 }
-
 requestAnimationFrame(drawAll);
