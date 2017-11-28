@@ -5,8 +5,14 @@ var ctx = canvas.getContext("2d");
 var catImage = [];
 catImage[0] = new Image();
 catImage[1] = new Image();
+
+var catLoad = false;
+catImage.onload = function() {
+	catLoad = true;
+}
 catImage[0].src = "cat1.png";
 catImage[1].src = "cat2.png";
+
 //배경 그림 부르기
 var bg = new Image();
 var bgLoad = false;
@@ -17,7 +23,12 @@ bg.src = 'bg.png';
 
 //장애물  그림 부르기
 var objImage = new Image();
+var objLoad = false;
+objImage.onload = function() {
+	objLoad = true;
+}
 objImage.src = "obj.png";
+
 //장애물 변수
 var Crab = {
 	"sx":35,
@@ -48,9 +59,17 @@ function drawobj() {
 function collision() {
 	if (Crab.x-obji > catX-15 && Crab.x-obji < catX+catwidth-15
 	&& Crab.y > catY-15 && Crab.y < catY+catheight-15) {
-				alert("GAME OVER");
-				document.location.reload();
+		gameover();	
+		gameend = true;
 	}
+}
+
+//game over
+function gameover() {
+	ctx.font = "16px Arial";
+	ctx.fillStyle = "red";
+	ctx.font = "40px Verdana";
+	ctx.fillText("GAME OVER", 150, 170);
 }
 
 //점수 계산
@@ -134,7 +153,6 @@ function jump() {
 }
 
 //일시정지 함수
-document.addEventListener("click",pause);
 var isRunning = true;
 function pause() {
 	isRunning = !isRunning;
@@ -144,17 +162,28 @@ function pause() {
 	}
 }
 
-//그리기
-function drawAll() {
-	ctx.clearRect(0,0,canvas.width,canvas.height);
-	drawbg();
-	drawobj();
-	collision();
-	drawcat();
-	checkScore();
+//재시작 함수
+function start(){
+	document.location.reload();
+}
 
-	if(isRunning) {
-	requestAnimationFrame(drawAll);
+//그리기
+var gameend = false;
+function drawAll() {
+	if (gameend) {
+		return;
+	} else {
+		ctx.clearRect(0,0,canvas.width,canvas.height);
+		drawbg();
+		drawobj();
+		collision();
+		drawcat();
+		checkScore();
+
+		if(isRunning) {
+		requestAnimationFrame(drawAll);
+		}
 	}
+	
 }
 drawAll();
