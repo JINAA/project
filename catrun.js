@@ -151,11 +151,13 @@ function jump() {
 		}
 	}
 }
-//모바일용 점프버튼 함수
+//모바일용 점프 함수
 function jumpM() {
-	if (catY > canvas.height / 2){
-		dy = -8;
-	}
+	
+		if (catY > canvas.height / 2){
+			dy = -8;
+		}
+	
 }
 
 //일시정지 함수
